@@ -10,4 +10,10 @@ Esquema Visual de Flujo
 [Lectura de informacion o datos: Nombre. Area Terrestre, Area maritima, frontera y la costa]   
    |
    |
-[condicionales ]
+[son todos los valores mayores a 0?  > (no) [mostrar errores y volver a leerlos]]
+   |
+   |
+   si
+   |
+   |
+
