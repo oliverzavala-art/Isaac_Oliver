@@ -1,3 +1,5 @@
 # Isaac_Oliver
-Proyecto Final
-# Tener en cuenta la configuracion del programa.
+# Proyecto Final
+# Nombre del Proyecto
+# Medidas de dimensión y extensió.
+#
