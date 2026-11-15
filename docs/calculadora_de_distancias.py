@@ -17,3 +17,12 @@ Unidad:  kilómetros
 Consultando datos...'''
 
 from api import obtener_coordenadas
+
+def mostrar_menu():
+    """Mostrar el menú de opciones de la calculadora de distancias."""
+    print("\n=== Calculadora de Distancias ===")
+    print("1. Calcular distancia")
+    print("2. Salir")
+
+    def pedir_ciudad(mensaje):
+        return input(mensaje)
