@@ -12,7 +12,7 @@ def mostrar_encabezado():
     print("   PROYECTO FINAL: MEDIDAS DE DIMENSIÓN Y EXTENSIÓN")
     print("   Autor: Isaac Oliver")
     print("=" * 50)
-
+""
 def procesar_reporte(datos):
     """
     Procesa el diccionario cargado en memoria y muestra 
