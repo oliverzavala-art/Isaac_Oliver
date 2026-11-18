@@ -12,6 +12,7 @@ from math import atan2, cos, radians, sin, sqrt
 RADIO_TIERRA_KM = 6371.0088
 
 #Esta funcion calcula la distancia entre dos cordenadas geograficas(latitud, longitud) usando la formula de Haversine
+
 def calcular_distancia(coordenadas_origen, coordenadas_destino):
     """Calcula la distancia de gran círculo entre dos pares (latitud, longitud)."""
     latitud_origen, longitud_origen = map(math.radians, coordenadas_origen)
