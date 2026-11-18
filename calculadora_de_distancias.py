@@ -10,7 +10,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 from api import obtener_coordenadas
 
 RADIO_TIERRA_KM = 6371.0088
-
+#Esta función calcula la distancia de gran círculo entre dos pares (latitud, longitud) utilizando la fórmula de Haversine. La distancia se devuelve en kilómetros.
 
 def calcular_distancia(coordenadas_origen, coordenadas_destino):
     """Calcula la distancia de gran círculo entre dos pares (latitud, longitud)."""
