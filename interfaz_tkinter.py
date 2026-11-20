@@ -61,6 +61,15 @@ def calcular():
         messagebox.showwarning("Aviso", "Escribe ambas ciudades.")
         return
 
+    if not any(caracter.isalpha() for caracter in origen) or not any(
+        caracter.isalpha() for caracter in destino
+    ):
+        messagebox.showwarning(
+            "Aviso",
+            "Escribe solo el nombre de la ciudad y el país, sin usar números.",
+        )
+        return
+
     unidad_seleccionada = unidad.get()
     boton_calcular.config(state=tk.DISABLED)
     lbl_resultado.config(text="Calculando...")
