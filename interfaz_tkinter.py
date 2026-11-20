@@ -110,7 +110,7 @@ def revisar_resultado():
 
 ventana = tk.Tk()
 ventana.title("Calculadora de Distancias")
-ventana.geometry("360x270")
+ventana.geometry("360x310")
 
 try:
     cache = cargar_cache()
@@ -144,5 +144,12 @@ boton_calcular.pack(pady=10)
 
 lbl_resultado = tk.Label(ventana, text="", font=("Arial", 10, "bold"))
 lbl_resultado.pack()
+
+boton_salir = tk.Button(
+    ventana,
+    text="Salir",
+    command=ventana.destroy,
+)
+boton_salir.pack(pady=(10, 15))
 
 ventana.mainloop()
