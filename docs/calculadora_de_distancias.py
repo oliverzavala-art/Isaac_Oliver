@@ -84,6 +84,16 @@ VELOCIDAD_AVION = 800
 VELOCIDAD_AUTO = 80
 #Este código calcula el tiempo de viaje estimado en horas entre dos ciudades dadas
 #  la distancia y la velocidad del medio de transporte.
+def calcular_tiempo_viaje(distancia, velocidad):
+    ##calcula el tiempo de viaje en horas decimal y lo devuelve.
+ return distancia / velocidad
+
+ #Este codigo convierte horas decimales a horas y minutos
+ #  y devuelve una cadena con el formato "X horas Y minutos".
+ def convertir_horas_a_horas_y_minutos(horas):
+    horas_enteras = int(horas)
+    minutos = int((horas - horas_enteras) * 60)
+    return f"{horas_enteras} horas {minutos} minutos"
 
 def mostrar_menu():
     #Este código muestra el menú y calcula distancias entre las ciudades elegidas.
