@@ -33,17 +33,19 @@ def guardar_cache(cache):
     """Saves updated dictionary cache to the local JSON file inside the subfolder."""
     #este programa crea automáticamente una subcarpeta para almacenar el archivo de caché si no existe
     try:
-        # Create the subfolder automatically if it doesn't exist
         os.makedirs(CACHE_DIR, exist_ok=True)
-
         with open(CACHE_FILE, "w", encoding="utf-8") as f:
+#Este codigo Guardar el diccionario de caché en el archivo JSON con formato legible
             json.dump(cache, f, ensure_ascii=False, indent=4)
+#Este código maneja errores de entrada/salida al guardar el archivo de caché y muestra un mensaje de error si ocurre un problema.
     except IOError as e:
         print(f"[CACHE ERROR] Could not save file: {e}")
 
 
 
 def calcular_distancia(coordenadas_origen, coordenadas_destino):
+    #Este código calcula la distancia de gran círculo entre 
+    # dos pares de coordenadas (latitud, longitud) utilizando la fórmula de Haversine.
     """Calcula la distancia de gran círculo entre dos pares (latitud, longitud)."""
     latitud_origen, longitud_origen = map(math.radians, coordenadas_origen)
     latitud_destino, longitud_destino = map(math.radians, coordenadas_destino)
@@ -122,5 +124,4 @@ def mostrar_menu():
 
 if __name__ == "__main__":
     mostrar_menu()  
-
 
