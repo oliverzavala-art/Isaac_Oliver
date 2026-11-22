@@ -71,7 +71,7 @@ def pedir_ciudad(mensaje):
         if ciudad:
             return ciudad
         print("Por favor, ingresa una ciudad válida.")
-
+#E
 
 def pedir_unidad():
     #Este código solicita al usuario que ingrese la unidad en la que se mostrará la distancia.
@@ -80,22 +80,30 @@ def pedir_unidad():
         if unidad in ("km", "millas"):
             return unidad
         print("Por favor, ingresa «km» o «millas».")
+ #Constantes de velocidad en km/h para avión y auto
 VELOCIDAD_AVION = 800
 VELOCIDAD_AUTO = 80
+
 #Este código calcula el tiempo de viaje estimado en horas entre dos ciudades dadas
 #  la distancia y la velocidad del medio de transporte.
+
 def calcular_tiempo_viaje(distancia, velocidad):
-    ##calcula el tiempo de viaje en horas decimal y lo devuelve.
+    ##calcula el tiempo de viaje en horas decimal y lo devuelve como un número decimal.
  return distancia / velocidad
 
  #Este codigo convierte horas decimales a horas y minutos
  #  y devuelve una cadena con el formato "X horas Y minutos".
 
- def convertir_horas_a_horas_y_minutos(horas):
+ tiempo_avion = calcular_tiempo_viaje(distancia, VELOCIDAD_AVION)
+ tiempo_auto = calcular_tiempo_viaje(distancia, VELOCIDAD_AUTO) 
+
+#Este código muestra el tiempo estimado de viaje en horas y minutos para un avión y un auto,
+#  utilizando la distancia calculada y las velocidades predefinidas.
+def convertir_horas_a_horas_y_minutos(horas):
     horas_enteras = int(horas)
     minutos = int((horas - horas_enteras) * 60)
     return f"{horas_enteras} horas {minutos} minutos"
- print(convertir_horas_a_horas_y_minutos(3.5))
+print(convertir_horas_a_horas_y_minutos(3.5))
 def mostrar_menu():
     #Este código muestra el menú y calcula distancias entre las ciudades elegidas.
     while True:
@@ -139,8 +147,14 @@ def mostrar_menu():
         print("\n--- Resultado ---")
         print(f"Origen: {ciudad_origen}")
         print(f"Destino: {ciudad_destino}")
-        print(f"Distancia aproximada: {distancia:.2f} {etiqueta}")
+        print(f"Distancia aproximada en linea recta: {distancia:.2f} {etiqueta}")
+#Este código calcula y muestra el tiempo estimado de viaje en horas y minutos para un avión y un auto,
+#  utilizando la distancia calculada y las velocidades predefinidas.    
+        tiempo_avion = calcular_tiempo_viaje(distancia_km, VELOCIDAD_AVION)
+        tiempo_auto = calcular_tiempo_viaje(distancia_km, VELOCIDAD_AUTO)
 
+        print(f"Tiempo estimado en avión: {convertir_horas_a_horas_y_minutos(tiempo_avion)}")
+        print(f"Tiempo estimado en auto: {convertir_horas_a_horas_y_minutos(tiempo_auto)}")
 
 if __name__ == "__main__":
     mostrar_menu()  

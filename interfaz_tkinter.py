@@ -6,7 +6,11 @@ from pathlib import Path
 from tkinter import messagebox
 
 from api import obtener_coordenadas
-from calculadora_de_distancias import calcular_distancia
+from calculadora_de_distancias import (
+    calcular_distancia,
+    convertir_horas_a_horas_y_minutos,
+    obtener_distancias_y_tiempos,
+)
 
 
 RUTA_CACHE = Path(__file__).resolve().parent / "data" / "coordenadas_cache.json"
@@ -83,7 +87,7 @@ def calcular():
                 resultado = ("no_encontrada", None)
             else:
                 distancia_km = calcular_distancia(coord_origen, coord_destino)
-                resultado = ("ok", distancia_km)
+                resultado = ("ok", obtener_distancias_y_tiempos(distancia_km))
         except (OSError, ValueError, TypeError) as error:
             resultado = ("error", str(error))
 
@@ -109,17 +113,34 @@ def revisar_resultado():
     elif estado == "error":
         lbl_resultado.config(text="No se pudo completar el cálculo.")
         messagebox.showerror("Error", str(resultado))
-    elif unidad.get() == "millas":
-        lbl_resultado.config(
-            text=f"Distancia: {resultado / 1.609344:.2f} millas"
-        )
     else:
-        lbl_resultado.config(text=f"Distancia: {resultado:.2f} km")
+        def formatear(kilometros):
+            if unidad.get() == "millas":
+                return f"{kilometros / 1.609344:.2f} millas"
+            return f"{kilometros:.2f} km"
+
+        medio_seleccionado = medio.get()
+        lineas = []
+        if medio_seleccionado in ("avion", "ambos"):
+            avion = resultado["avion"]
+            lineas.append(
+                "Avión: "
+                f"{formatear(avion['distancia_km'])} | "
+                f"{convertir_horas_a_horas_y_minutos(avion['tiempo_horas'])}"
+            )
+        if medio_seleccionado in ("carro", "ambos"):
+            carro = resultado["carro"]
+            lineas.append(
+                "Carro: "
+                f"{formatear(carro['distancia_km'])} | "
+                f"{convertir_horas_a_horas_y_minutos(carro['tiempo_horas'])}"
+            )
+        lbl_resultado.config(text="\n".join(lineas))
 
 
 ventana = tk.Tk()
 ventana.title("Calculadora de Distancias")
-ventana.geometry("360x310")
+ventana.geometry("390x390")
 
 try:
     cache = cargar_cache()
@@ -146,6 +167,18 @@ tk.Radiobutton(
 ).pack(pady=(10, 0))
 tk.Radiobutton(
     ventana, text="Millas", variable=unidad, value="millas"
+).pack()
+
+medio = tk.StringVar(value="ambos")
+tk.Label(ventana, text="Medio de viaje:").pack(pady=(8, 0))
+tk.Radiobutton(
+    ventana, text="Avión", variable=medio, value="avion"
+).pack()
+tk.Radiobutton(
+    ventana, text="Carro", variable=medio, value="carro"
+).pack()
+tk.Radiobutton(
+    ventana, text="Ambos", variable=medio, value="ambos"
 ).pack()
 
 boton_calcular = tk.Button(ventana, text="Calcular", command=calcular)
