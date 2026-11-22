@@ -31,6 +31,7 @@ def cargar_cache():
 
 def guardar_cache(cache):
     """Saves updated dictionary cache to the local JSON file inside the subfolder."""
+    #este programa crea automáticamente una subcarpeta para almacenar el archivo de caché si no existe
     try:
         # Create the subfolder automatically if it doesn't exist
         os.makedirs(CACHE_DIR, exist_ok=True)
@@ -120,4 +121,6 @@ def mostrar_menu():
 
 
 if __name__ == "__main__":
-    mostrar_menu()
+    mostrar_menu()  
+
+
