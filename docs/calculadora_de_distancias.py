@@ -30,7 +30,6 @@ def cargar_cache():
 
 
 def guardar_cache(cache):
-    """Saves updated dictionary cache to the local JSON file inside the subfolder."""
     #este programa crea automáticamente una subcarpeta para almacenar el archivo de caché si no existe
     try:
         os.makedirs(CACHE_DIR, exist_ok=True)
@@ -64,7 +63,8 @@ def calcular_distancia(coordenadas_origen, coordenadas_destino):
 
 
 def pedir_ciudad(mensaje):
-    """Solicita una ciudad y rechaza una respuesta vacía."""
+    #Este código solicita al usuario que ingrese el nombre de una ciudad 
+    # y asegura que la entrada no esté vacía. Si el usuario no proporciona una ciudad válida, se le pedirá que lo intente nuevamente.
     while True:
         ciudad = input(mensaje).strip()
         if ciudad:
@@ -73,7 +73,7 @@ def pedir_ciudad(mensaje):
 
 
 def pedir_unidad():
-    """Solicita la unidad en la que se mostrará la distancia."""
+    #Este código solicita al usuario que ingrese la unidad en la que se mostrará la distancia.
     while True:
         unidad = input("Unidad (km/millas): ").strip().lower()
         if unidad in ("km", "millas"):
@@ -81,7 +81,7 @@ def pedir_unidad():
         print("Por favor, ingresa «km» o «millas».")
 
 def mostrar_menu():
-    """Muestra el menú y calcula distancias entre las ciudades elegidas."""
+    #Este código muestra el menú y calcula distancias entre las ciudades elegidas.
     while True:
         print("\n=== Calculadora de Distancias ===")
         print("1. Calcular distancia")
