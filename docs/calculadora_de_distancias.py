@@ -19,7 +19,7 @@ CACHE_FILE = os.path.join(CACHE_DIR, "coordenadas_cache.json")
 
 
 def cargar_cache():
-    """Reads local JSON cache file if present; returns an empty dict on error."""
+    #Este código lee el archivo JSON de caché local si está presente; devuelve un diccionario vacío en caso de error.
     if os.path.exists(CACHE_FILE):
         try:
             with open(CACHE_FILE, "r", encoding="utf-8") as f:
@@ -45,7 +45,6 @@ def guardar_cache(cache):
 def calcular_distancia(coordenadas_origen, coordenadas_destino):
     #Este código calcula la distancia de gran círculo entre 
     # dos pares de coordenadas (latitud, longitud) utilizando la fórmula de Haversine.
-    """Calcula la distancia de gran círculo entre dos pares (latitud, longitud)."""
     latitud_origen, longitud_origen = map(math.radians, coordenadas_origen)
     latitud_destino, longitud_destino = map(math.radians, coordenadas_destino)
 
@@ -58,6 +57,8 @@ def calcular_distancia(coordenadas_origen, coordenadas_destino):
         * math.sin(diferencia_longitud / 2) ** 2
     )
     a = min(1.0, max(0.0, a))
+    #Este código calcula el ángulo central entre dos puntos en la superficie
+    #  de la Tierra utilizando la fórmula de Haversine y devuelve la distancia en kilómetros.
     angulo_central = 2 * math.atan2(math.sqrt(a), math.sqrt(1 - a))
     return RADIO_TIERRA_KM * angulo_central
 
@@ -79,6 +80,10 @@ def pedir_unidad():
         if unidad in ("km", "millas"):
             return unidad
         print("Por favor, ingresa «km» o «millas».")
+VELOCIDAD_AVION = 800
+VELOCIDAD_AUTO = 80
+#Este código calcula el tiempo de viaje estimado en horas entre dos ciudades dadas
+#  la distancia y la velocidad del medio de transporte.
 
 def mostrar_menu():
     #Este código muestra el menú y calcula distancias entre las ciudades elegidas.
@@ -107,15 +112,19 @@ def mostrar_menu():
         coordenadas_destino = obtener_coordenadas(ciudad_destino)
         if coordenadas_destino is None:
             continue
+        
 
         distancia_km = calcular_distancia(coordenadas_origen, coordenadas_destino)
         if unidad == "millas":
+            #Este código convierte la distancia de kilómetros a millas
+
             distancia = distancia_km / 1.609344
             etiqueta = "millas"
         else:
             distancia = distancia_km
             etiqueta = "km"
-
+#Este código muestra el resultado en kilómetros de la distancia calculada entre las ciudades de origen y destino,
+#  junto con la unidad seleccionada por el usuario. 
         print("\n--- Resultado ---")
         print(f"Origen: {ciudad_origen}")
         print(f"Destino: {ciudad_destino}")
