@@ -26,7 +26,12 @@ def obtener_coordenadas(ciudad):
     try:
         respuesta = requests.get(
             URL_GEOCODIFICACION,
-            params={"q": ciudad, "format": "jsonv2", "limit": 1},
+            params={
+                "q": ciudad,
+                "format": "jsonv2",
+                "limit": 1,
+                "featureType": "city",
+            },
             headers=ENCABEZADOS_GEOCODIFICACION,
             timeout=10,
         )
