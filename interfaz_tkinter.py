@@ -87,7 +87,16 @@ def calcular():
                 resultado = ("no_encontrada", None)
             else:
                 distancia_km = calcular_distancia(coord_origen, coord_destino)
-                resultado = ("ok", obtener_distancias_y_tiempos(distancia_km))
+                resultado = (
+                    "ok",
+                    {
+                        "coordenadas_origen": coord_origen,
+                        "coordenadas_destino": coord_destino,
+                        "distancias_y_tiempos": obtener_distancias_y_tiempos(
+                            distancia_km
+                        ),
+                    },
+                )
         except (OSError, ValueError, TypeError) as error:
             resultado = ("error", str(error))
 
@@ -119,17 +128,29 @@ def revisar_resultado():
                 return f"{kilometros / 1.609344:.2f} millas"
             return f"{kilometros:.2f} km"
 
+        coordenadas_origen = resultado["coordenadas_origen"]
+        coordenadas_destino = resultado["coordenadas_destino"]
+        distancias_y_tiempos = resultado["distancias_y_tiempos"]
         medio_seleccionado = medio.get()
-        lineas = []
+        lineas = [
+            (
+                "Origen (latitud, longitud): "
+                f"{coordenadas_origen[0]:.6f}, {coordenadas_origen[1]:.6f}"
+            ),
+            (
+                "Destino (latitud, longitud): "
+                f"{coordenadas_destino[0]:.6f}, {coordenadas_destino[1]:.6f}"
+            ),
+        ]
         if medio_seleccionado in ("avion", "ambos"):
-            avion = resultado["avion"]
+            avion = distancias_y_tiempos["avion"]
             lineas.append(
                 "Avión: "
                 f"{formatear(avion['distancia_km'])} | "
                 f"{convertir_horas_a_horas_y_minutos(avion['tiempo_horas'])}"
             )
         if medio_seleccionado in ("carro", "ambos"):
-            carro = resultado["carro"]
+            carro = distancias_y_tiempos["carro"]
             lineas.append(
                 "Carro: "
                 f"{formatear(carro['distancia_km'])} | "
@@ -140,7 +161,7 @@ def revisar_resultado():
 
 ventana = tk.Tk()
 ventana.title("Calculadora de Distancias")
-ventana.geometry("390x390")
+ventana.geometry("460x460")
 
 try:
     cache = cargar_cache()
@@ -185,7 +206,7 @@ boton_calcular = tk.Button(ventana, text="Calcular", command=calcular)
 boton_calcular.pack(pady=10)
 
 lbl_resultado = tk.Label(ventana, text="", font=("Arial", 10, "bold"))
-lbl_resultado.pack()
+lbl_resultado.pack(padx=10, pady=5)
 
 boton_salir = tk.Button(
     ventana,
