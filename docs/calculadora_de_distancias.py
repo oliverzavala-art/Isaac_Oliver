@@ -10,6 +10,7 @@ import math
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from api import obtener_coordenadas
+from ciudad import Ciudad
 from math import atan2, cos, radians, sin, sqrt
 RADIO_TIERRA_KM = 6371.0088
 
@@ -132,9 +133,13 @@ def mostrar_menu():
         coordenadas_destino = obtener_coordenadas(ciudad_destino)
         if coordenadas_destino is None:
             continue
-        
 
-        distancia_km = calcular_distancia(coordenadas_origen, coordenadas_destino)
+        origen = Ciudad(ciudad_origen, *coordenadas_origen)
+        destino = Ciudad(ciudad_destino, *coordenadas_destino)
+        distancia_km = calcular_distancia(
+            origen.coordenadas,
+            destino.coordenadas,
+        )
         if unidad == "millas":
             #Este código convierte la distancia de kilómetros a millas
 
@@ -146,15 +151,15 @@ def mostrar_menu():
 #Este código muestra el resultado en kilómetros de la distancia calculada entre las ciudades de origen y destino,
 #  junto con la unidad seleccionada por el usuario. 
         print("\n--- Resultado ---")
-        print(f"Origen: {ciudad_origen}")
+        print(f"Origen: {origen.nombre}")
         print(
             "Coordenadas de origen (latitud, longitud): "
-            f"{coordenadas_origen[0]:.6f}, {coordenadas_origen[1]:.6f}"
+            f"{origen.latitud:.6f}, {origen.longitud:.6f}"
         )
-        print(f"Destino: {ciudad_destino}")
+        print(f"Destino: {destino.nombre}")
         print(
             "Coordenadas de destino (latitud, longitud): "
-            f"{coordenadas_destino[0]:.6f}, {coordenadas_destino[1]:.6f}"
+            f"{destino.latitud:.6f}, {destino.longitud:.6f}"
         )
         print(f"Distancia aproximada en linea recta: {distancia:.2f} {etiqueta}")
 #Este código calcula y muestra el tiempo estimado de viaje en horas y minutos para un avión y un auto,

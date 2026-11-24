@@ -6,6 +6,7 @@ from pathlib import Path
 from tkinter import messagebox
 
 from api import obtener_coordenadas
+from ciudad import Ciudad
 from calculadora_de_distancias import (
     calcular_distancia,
     convertir_horas_a_horas_y_minutos,
@@ -86,12 +87,17 @@ def calcular():
             if coord_origen is None or coord_destino is None:
                 resultado = ("no_encontrada", None)
             else:
-                distancia_km = calcular_distancia(coord_origen, coord_destino)
+                ciudad_origen = Ciudad(origen, *coord_origen)
+                ciudad_destino = Ciudad(destino, *coord_destino)
+                distancia_km = calcular_distancia(
+                    ciudad_origen.coordenadas,
+                    ciudad_destino.coordenadas,
+                )
                 resultado = (
                     "ok",
                     {
-                        "coordenadas_origen": coord_origen,
-                        "coordenadas_destino": coord_destino,
+                        "ciudad_origen": ciudad_origen,
+                        "ciudad_destino": ciudad_destino,
                         "distancias_y_tiempos": obtener_distancias_y_tiempos(
                             distancia_km
                         ),
@@ -128,18 +134,18 @@ def revisar_resultado():
                 return f"{kilometros / 1.609344:.2f} millas"
             return f"{kilometros:.2f} km"
 
-        coordenadas_origen = resultado["coordenadas_origen"]
-        coordenadas_destino = resultado["coordenadas_destino"]
+        ciudad_origen = resultado["ciudad_origen"]
+        ciudad_destino = resultado["ciudad_destino"]
         distancias_y_tiempos = resultado["distancias_y_tiempos"]
         medio_seleccionado = medio.get()
         lineas = [
             (
-                "Origen (latitud, longitud): "
-                f"{coordenadas_origen[0]:.6f}, {coordenadas_origen[1]:.6f}"
+                f"Origen - {ciudad_origen.nombre} (latitud, longitud): "
+                f"{ciudad_origen.latitud:.6f}, {ciudad_origen.longitud:.6f}"
             ),
             (
-                "Destino (latitud, longitud): "
-                f"{coordenadas_destino[0]:.6f}, {coordenadas_destino[1]:.6f}"
+                f"Destino - {ciudad_destino.nombre} (latitud, longitud): "
+                f"{ciudad_destino.latitud:.6f}, {ciudad_destino.longitud:.6f}"
             ),
         ]
         if medio_seleccionado in ("avion", "ambos"):
