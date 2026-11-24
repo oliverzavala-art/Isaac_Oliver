@@ -179,6 +179,14 @@ tk.Radiobutton(
 ).pack()
 tk.Radiobutton(
     ventana, text="Ambos", variable=medio, value="ambos"
+Traceback (most recent call last):
+  File "c:\Users\elder\Proyecto Final 1400\Isaac_Oliver\interfaz_tkinter.py", line 9, in <module>
+    from calculadora_de_distancias import (
+    ...<3 lines>...
+    )
+ImportError: cannot import name 'convertir_horas_a_horas_y_minutos' from 'calculadora_de_distancias' (c:\Users\elder\Proyecto Final 1400\Isaac_Oliver\calculadora_de_distancias.py)
+PS C:\Users\elder\Proyecto Final 1400\Isaac_Oliver> 
+
 ).pack()
 
 boton_calcular = tk.Button(ventana, text="Calcular", command=calcular)
