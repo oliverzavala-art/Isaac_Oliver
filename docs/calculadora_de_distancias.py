@@ -103,7 +103,8 @@ def convertir_horas_a_horas_y_minutos(horas):
     horas_enteras = int(horas)
     minutos = int((horas - horas_enteras) * 60)
     return f"{horas_enteras} horas {minutos} minutos"
-print(convertir_horas_a_horas_y_minutos(3.5))
+
+
 def mostrar_menu():
     #Este código muestra el menú y calcula distancias entre las ciudades elegidas.
     while True:
@@ -146,7 +147,15 @@ def mostrar_menu():
 #  junto con la unidad seleccionada por el usuario. 
         print("\n--- Resultado ---")
         print(f"Origen: {ciudad_origen}")
+        print(
+            "Coordenadas de origen (latitud, longitud): "
+            f"{coordenadas_origen[0]:.6f}, {coordenadas_origen[1]:.6f}"
+        )
         print(f"Destino: {ciudad_destino}")
+        print(
+            "Coordenadas de destino (latitud, longitud): "
+            f"{coordenadas_destino[0]:.6f}, {coordenadas_destino[1]:.6f}"
+        )
         print(f"Distancia aproximada en linea recta: {distancia:.2f} {etiqueta}")
 #Este código calcula y muestra el tiempo estimado de viaje en horas y minutos para un avión y un auto,
 #  utilizando la distancia calculada y las velocidades predefinidas.    
