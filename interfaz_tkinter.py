@@ -62,7 +62,8 @@ def obtener_coordenadas_con_cache(ciudad, cache):
 
     return coordenadas
 
-
+# esta fubcion se encarga de calcular la distancia entre dos ciudades ingresadas por el usuario en la interfaz gráfica. 
+# 1Valida las entradas, obtiene las coordenadas de las ciudades (usando caché si es posible), calcula la distancia y el tiempo estimado de viaje según el medio seleccionado (avión, carro o ambos), y finalmente muestra los resultados en la interfaz.
 def calcular():
     origen = entrada_origen.get().strip()
     destino = entrada_destino.get().strip()
