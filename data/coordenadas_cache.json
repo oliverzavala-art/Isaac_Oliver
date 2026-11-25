@@ -26,5 +26,13 @@
     "salt lake city, estados unidos": [
         40.7596198,
         -111.886797
+    ],
+    "salt lake city utah": [
+        40.7596198,
+        -111.886797
+    ],
+    "idaho falls": [
+        43.4887907,
+        -112.03628
     ]
 }
