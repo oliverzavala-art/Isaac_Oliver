@@ -165,7 +165,7 @@ def revisar_resultado():
                 f"{formatear(resultado['distancia_km'])}"
             )
         else:
-            if medio_seleccionado in ("avion", "ambos"):
+            if medio_seleccionado in ("avion"):
                 avion = distancias_y_tiempos["avion"]
                 lineas.append(
                     "Avión: "
