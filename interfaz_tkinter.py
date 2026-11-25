@@ -84,6 +84,10 @@ def calcular():
     unidad_seleccionada = unidad.get()
     boton_calcular.config(state=tk.DISABLED)
     lbl_resultado.config(text="Calculando...")
+#Aqui def trabajo es una funcion anidada, que la funcion proincipal es calcular, y se ejecuta en un hilo separado para no bloquear 
+# la interfaz gráfica mientras se realizan las operaciones de obtención de coordenadas y cálculo de distancias.
+# Es por eso que se utiliza threading.Thread para ejecutar la función trabajo en segundo plano, y luego se revisa el resultado periódicamente con ventana.after.
+#Threading threads permite ejecutar múltiples operaciones al mismo tiempo en un programa, lo que es útil para mantener la interfaz de usuario receptiva mientras se realizan tareas que pueden tardar en completarse.
 
     def trabajo():
         try:
@@ -117,7 +121,7 @@ def calcular():
     threading.Thread(target=trabajo, daemon=True).start()
     ventana.after(100, revisar_resultado)
 
-
+#
 def revisar_resultado():
     try:
         estado, resultado = cola_resultados.get_nowait()
