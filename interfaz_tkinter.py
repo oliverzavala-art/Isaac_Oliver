@@ -180,6 +180,27 @@ def revisar_resultado():
                 )
         lbl_resultado.config(text="\n".join(lineas))
 
+class Ciudad:
+    def __init__(self, nombre: str, latitud: float, longitud: float):
+        if not nombre or not nombre.strip():
+            raise ValueError("El nombre de la ciudad no puede estar vacío.")
+
+        self.nombre = nombre.strip()
+        self.latitud = float(latitud)
+        self.longitud = float(longitud)
+
+        if not (-90.0 <= self.latitud <= 90.0):
+            raise ValueError("La latitud debe estar entre -90 y 90.")
+        if not (-180.0 <= self.longitud <= 180.0):
+            raise ValueError("La longitud debe estar entre -180 y 180.")
+
+    @property
+    def coordenadas(self) -> tuple[float, float]:
+        return (self.latitud, self.longitud)
+
+    def __str__(self) -> str:
+        return f"{self.nombre} ({self.latitud:.6f}, {self.longitud:.6f})"
+
 
 ventana = tk.Tk()
 ventana.title("Calculadora de Distancias")
