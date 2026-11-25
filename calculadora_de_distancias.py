@@ -9,8 +9,8 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 from api import obtener_coordenadas
 RADIO_TIERRA_KM = 6371.0088
-VELOCIDAD_AVION = 800
-VELOCIDAD_AUTO = 80
+VELOCIDAD_AVION_KMH = 800
+VELOCIDAD_AUTO_KMH = 80
 #Esta función calcula la distancia de gran círculo entre dos pares (latitud, longitud) utilizando la fórmula de Haversine. La distancia se devuelve en kilómetros.
 
 def calcular_distancia(coordenadas_origen, coordenadas_destino):
@@ -31,33 +31,38 @@ def calcular_distancia(coordenadas_origen, coordenadas_destino):
     return RADIO_TIERRA_KM * angulo_central
 
 
-def calcular_tiempo_viaje(distancia, velocidad):
+def calcular_tiempo_viaje(distancia_km, velocidad_kmh):
     """Calcula el tiempo de viaje en horas."""
-    if velocidad <= 0:
-        raise ValueError("La velocidad debe ser mayor que cero.")
-    return distancia / velocidad
+    if distancia_km < 0 or velocidad_kmh <= 0:
+        raise ValueError("La distancia y la velocidad deben ser válidas.")
+    return distancia_km / velocidad_kmh
 
 
 def convertir_horas_a_horas_y_minutos(horas):
-    """Convierte horas decimales a texto con horas y minutos."""
+    """Convierte horas decimales a texto en horas y minutos."""
     if horas < 0:
         raise ValueError("Las horas no pueden ser negativas.")
 
-    minutos_totales = round(horas * 60)
-    horas_enteras, minutos = divmod(minutos_totales, 60)
+    horas_enteras = int(horas)
+    minutos = int(round((horas - horas_enteras) * 60))
+    if minutos == 60:
+        horas_enteras += 1
+        minutos = 0
     return f"{horas_enteras} horas {minutos} minutos"
 
 
 def obtener_distancias_y_tiempos(distancia_km):
-    """Devuelve la distancia y el tiempo estimado para avión y carro."""
+    """Calcula las distancias y los tiempos estimados para avión y automóvil."""
+    tiempo_avion = calcular_tiempo_viaje(distancia_km, VELOCIDAD_AVION_KMH)
+    tiempo_auto = calcular_tiempo_viaje(distancia_km, VELOCIDAD_AUTO_KMH)
     return {
         "avion": {
             "distancia_km": distancia_km,
-            "tiempo_horas": calcular_tiempo_viaje(distancia_km, VELOCIDAD_AVION),
+            "tiempo_horas": tiempo_avion,
         },
         "carro": {
             "distancia_km": distancia_km,
-            "tiempo_horas": calcular_tiempo_viaje(distancia_km, VELOCIDAD_AUTO),
+            "tiempo_horas": tiempo_auto,
         },
     }
 

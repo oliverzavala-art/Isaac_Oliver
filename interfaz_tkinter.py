@@ -81,7 +81,6 @@ def calcular():
         )
         return
 
-    unidad_seleccionada = unidad.get()
     boton_calcular.config(state=tk.DISABLED)
     lbl_resultado.config(text="Calculando...")
 #Aqui def trabajo es una funcion anidada, que la funcion proincipal es calcular, y se ejecuta en un hilo separado para no bloquear 
@@ -249,11 +248,15 @@ tk.Radiobutton(
     ventana, text="Ambos", variable=medio, value="ambos"
 ).pack()
 
-boton_calcular = tk.Button(ventana, text="Calcular", command=calcular)
-boton_calcular.pack(pady=10)
-
 lbl_resultado = tk.Label(ventana, text="", font=("Arial", 10, "bold"))
 lbl_resultado.pack(padx=10, pady=5)
+
+boton_calcular = tk.Button(
+    ventana,
+    text="Calcular",
+    command=calcular,
+)
+boton_calcular.pack(pady=(10, 0))
 
 boton_salir = tk.Button(
     ventana,
