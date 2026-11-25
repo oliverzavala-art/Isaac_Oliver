@@ -11,15 +11,31 @@
         14.7039413,
         -91.282818
     ],
-    "salt lake city": [
+    "buenos aires argentina": [
+        -34.6095579,
+        -58.3887904
+    ],
+    "montevideo uruguay": [
+        -34.9058916,
+        -56.1913095
+    ],
+    "san marcos, guatemala": [
+        14.9643813,
+        -91.7943267
+    ],
+    "salt lake city, estados unidos": [
         40.7596198,
         -111.886797
     ],
-    "bell garden california": [
-        37.3422693,
-        -121.9213586
+    "salt lake city utah": [
+        40.7596198,
+        -111.886797
     ],
     "idaho falls": [
+        43.4887907,
+        -112.03628
+    ],
+    "idaho falls idaho": [
         43.4887907,
         -112.03628
     ]

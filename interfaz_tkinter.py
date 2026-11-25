@@ -6,6 +6,7 @@ from pathlib import Path
 from tkinter import messagebox
 
 from api import obtener_coordenadas
+from ciudad import Ciudad
 from calculadora_de_distancias import (
     calcular_distancia,
     convertir_horas_a_horas_y_minutos,
@@ -15,7 +16,9 @@ from calculadora_de_distancias import (
 
 RUTA_CACHE = Path(__file__).resolve().parent / "data" / "coordenadas_cache.json"
 
-
+#Este código define funciones para cargar y guardar un caché de coordenadas de ciudades en un archivo JSON, así como para obtener coordenadas con caché y calcular distancias entre ciudades usando una interfaz gráfica de usuario (GUI) con Tkinter.
+#GUI es un entorno visual que permite interactuar con una computadora o dispositivo electrónico mediante elementos gráficos.
+#Tkinter. es una aplicación visual creada en Python usando su biblioteca estándar Tkinter para interactuar mediante ventanas, botones, menús y cuadros de texto en lugar de escribir comandos en una consola
 def cargar_cache():
     if not RUTA_CACHE.exists():
         return {}
@@ -28,17 +31,20 @@ def cargar_cache():
 
     return cache
 
-
+#Este código define una función para guardar un diccionario de caché en un archivo JSON, creando automáticamente la carpeta necesaria si no existe.
 def guardar_cache(cache):
     RUTA_CACHE.parent.mkdir(parents=True, exist_ok=True)
     with RUTA_CACHE.open("w", encoding="utf-8") as archivo:
         json.dump(cache, archivo, ensure_ascii=False, indent=4)
 
-
+#En esta parte del codigo, se define una función para obtener las coordenadas de una ciudad utilizando un caché local. Si las coordenadas 
+#ya están en el caché, se devuelven directamente; de lo contrario, se consultan a través de la API y se guardan en el caché para futuras consultas.
 def clave_ciudad(ciudad):
     return ciudad.strip().casefold()
 
-
+#En este codigo la funcion es obtener las coordenadas de una ciudad utilizando un caché local. 
+#Si las coordenadas ya están en el caché, se devuelven directamente; de lo contrario, 
+#se consultan a través de la API y se guardan en el caché para futuras consultas.
 def obtener_coordenadas_con_cache(ciudad, cache):
     clave = clave_ciudad(ciudad)
     if clave in cache:
@@ -56,7 +62,8 @@ def obtener_coordenadas_con_cache(ciudad, cache):
 
     return coordenadas
 
-
+# esta fubcion se encarga de calcular la distancia entre dos ciudades ingresadas por el usuario en la interfaz gráfica. 
+# 1Valida las entradas, obtiene las coordenadas de las ciudades (usando caché si es posible), calcula la distancia y el tiempo estimado de viaje según el medio seleccionado (avión, carro o ambos), y finalmente muestra los resultados en la interfaz.
 def calcular():
     origen = entrada_origen.get().strip()
     destino = entrada_destino.get().strip()
@@ -77,6 +84,10 @@ def calcular():
     unidad_seleccionada = unidad.get()
     boton_calcular.config(state=tk.DISABLED)
     lbl_resultado.config(text="Calculando...")
+#Aqui def trabajo es una funcion anidada, que la funcion proincipal es calcular, y se ejecuta en un hilo separado para no bloquear 
+# la interfaz gráfica mientras se realizan las operaciones de obtención de coordenadas y cálculo de distancias.
+# Es por eso que se utiliza threading.Thread para ejecutar la función trabajo en segundo plano, y luego se revisa el resultado periódicamente con ventana.after.
+#Threading threads permite ejecutar múltiples operaciones al mismo tiempo en un programa, lo que es útil para mantener la interfaz de usuario receptiva mientras se realizan tareas que pueden tardar en completarse.
 
     def trabajo():
         try:
@@ -86,8 +97,23 @@ def calcular():
             if coord_origen is None or coord_destino is None:
                 resultado = ("no_encontrada", None)
             else:
-                distancia_km = calcular_distancia(coord_origen, coord_destino)
-                resultado = ("ok", obtener_distancias_y_tiempos(distancia_km))
+                ciudad_origen = Ciudad(origen, *coord_origen)
+                ciudad_destino = Ciudad(destino, *coord_destino)
+                distancia_km = calcular_distancia(
+                    ciudad_origen.coordenadas,
+                    ciudad_destino.coordenadas,
+                )
+                resultado = (
+                    "ok",
+                    {
+                        "ciudad_origen": ciudad_origen,
+                        "ciudad_destino": ciudad_destino,
+                        "distancia_km": distancia_km,
+                        "distancias_y_tiempos": obtener_distancias_y_tiempos(
+                            distancia_km
+                        ),
+                    },
+                )
         except (OSError, ValueError, TypeError) as error:
             resultado = ("error", str(error))
 
@@ -96,7 +122,7 @@ def calcular():
     threading.Thread(target=trabajo, daemon=True).start()
     ventana.after(100, revisar_resultado)
 
-
+#
 def revisar_resultado():
     try:
         estado, resultado = cola_resultados.get_nowait()
@@ -119,28 +145,46 @@ def revisar_resultado():
                 return f"{kilometros / 1.609344:.2f} millas"
             return f"{kilometros:.2f} km"
 
+        ciudad_origen = resultado["ciudad_origen"]
+        ciudad_destino = resultado["ciudad_destino"]
+        distancias_y_tiempos = resultado["distancias_y_tiempos"]
         medio_seleccionado = medio.get()
-        lineas = []
-        if medio_seleccionado in ("avion", "ambos"):
-            avion = resultado["avion"]
+        lineas = [
+            (
+                f"Origen - {ciudad_origen.nombre} (latitud, longitud): "
+                f"{ciudad_origen.latitud:.6f}, {ciudad_origen.longitud:.6f}"
+            ),
+            (
+                f"Destino - {ciudad_destino.nombre} (latitud, longitud): "
+                f"{ciudad_destino.latitud:.6f}, {ciudad_destino.longitud:.6f}"
+            ),
+        ]
+        if medio_seleccionado == "recta":
             lineas.append(
-                "Avión: "
-                f"{formatear(avion['distancia_km'])} | "
-                f"{convertir_horas_a_horas_y_minutos(avion['tiempo_horas'])}"
+                f"Distancia en línea recta: "
+                f"{formatear(resultado['distancia_km'])}"
             )
-        if medio_seleccionado in ("carro", "ambos"):
-            carro = resultado["carro"]
-            lineas.append(
-                "Carro: "
-                f"{formatear(carro['distancia_km'])} | "
-                f"{convertir_horas_a_horas_y_minutos(carro['tiempo_horas'])}"
-            )
+        else:
+            if medio_seleccionado in ("avion", "ambos"):
+                avion = distancias_y_tiempos["avion"]
+                lineas.append(
+                    "Avión: "
+                    f"{formatear(avion['distancia_km'])} | "
+                    f"{convertir_horas_a_horas_y_minutos(avion['tiempo_horas'])}"
+                )
+            if medio_seleccionado in ("carro", "ambos"):
+                carro = distancias_y_tiempos["carro"]
+                lineas.append(
+                    "Carro: "
+                    f"{formatear(carro['distancia_km'])} | "
+                    f"{convertir_horas_a_horas_y_minutos(carro['tiempo_horas'])}"
+                )
         lbl_resultado.config(text="\n".join(lineas))
 
 
 ventana = tk.Tk()
 ventana.title("Calculadora de Distancias")
-ventana.geometry("390x390")
+ventana.geometry("460x490")
 
 try:
     cache = cargar_cache()
@@ -170,7 +214,10 @@ tk.Radiobutton(
 ).pack()
 
 medio = tk.StringVar(value="ambos")
-tk.Label(ventana, text="Medio de viaje:").pack(pady=(8, 0))
+tk.Label(ventana, text="Tipo de resultado:").pack(pady=(8, 0))
+tk.Radiobutton(
+    ventana, text="Línea recta", variable=medio, value="recta"
+).pack()
 tk.Radiobutton(
     ventana, text="Avión", variable=medio, value="avion"
 ).pack()
@@ -182,7 +229,7 @@ tk.Radiobutton(
 ).pack()
 
 lbl_resultado = tk.Label(ventana, text="", font=("Arial", 10, "bold"))
-lbl_resultado.pack()
+lbl_resultado.pack(padx=10, pady=5)
 
 boton_salir = tk.Button(
     ventana,

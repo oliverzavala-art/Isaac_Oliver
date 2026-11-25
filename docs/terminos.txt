@@ -1,3 +1,5 @@
 mensages juntos
 Oliver no veniste el dia de hoy tenemos que reunirnos para continuar con el avance
 3 Realizando asignaciones 
+Oliver agregue una interfaz para poder ver como queda al final el programa del proyecto final.
+Seria genial que lo puedas revisar y me avisar si queda o no.
