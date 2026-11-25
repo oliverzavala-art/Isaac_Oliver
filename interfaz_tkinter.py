@@ -108,6 +108,7 @@ def calcular():
                     {
                         "ciudad_origen": ciudad_origen,
                         "ciudad_destino": ciudad_destino,
+                        "distancia_km": distancia_km,
                         "distancias_y_tiempos": obtener_distancias_y_tiempos(
                             distancia_km
                         ),
@@ -158,26 +159,32 @@ def revisar_resultado():
                 f"{ciudad_destino.latitud:.6f}, {ciudad_destino.longitud:.6f}"
             ),
         ]
-        if medio_seleccionado in ("avion", "ambos"):
-            avion = distancias_y_tiempos["avion"]
+        if medio_seleccionado == "recta":
             lineas.append(
-                "Avión: "
-                f"{formatear(avion['distancia_km'])} | "
-                f"{convertir_horas_a_horas_y_minutos(avion['tiempo_horas'])}"
+                f"Distancia en línea recta: "
+                f"{formatear(resultado['distancia_km'])}"
             )
-        if medio_seleccionado in ("carro", "ambos"):
-            carro = distancias_y_tiempos["carro"]
-            lineas.append(
-                "Carro: "
-                f"{formatear(carro['distancia_km'])} | "
-                f"{convertir_horas_a_horas_y_minutos(carro['tiempo_horas'])}"
-            )
+        else:
+            if medio_seleccionado in ("avion", "ambos"):
+                avion = distancias_y_tiempos["avion"]
+                lineas.append(
+                    "Avión: "
+                    f"{formatear(avion['distancia_km'])} | "
+                    f"{convertir_horas_a_horas_y_minutos(avion['tiempo_horas'])}"
+                )
+            if medio_seleccionado in ("carro", "ambos"):
+                carro = distancias_y_tiempos["carro"]
+                lineas.append(
+                    "Carro: "
+                    f"{formatear(carro['distancia_km'])} | "
+                    f"{convertir_horas_a_horas_y_minutos(carro['tiempo_horas'])}"
+                )
         lbl_resultado.config(text="\n".join(lineas))
 
 
 ventana = tk.Tk()
 ventana.title("Calculadora de Distancias")
-ventana.geometry("460x460")
+ventana.geometry("460x490")
 
 try:
     cache = cargar_cache()
@@ -207,7 +214,10 @@ tk.Radiobutton(
 ).pack()
 
 medio = tk.StringVar(value="ambos")
-tk.Label(ventana, text="Medio de viaje:").pack(pady=(8, 0))
+tk.Label(ventana, text="Tipo de resultado:").pack(pady=(8, 0))
+tk.Radiobutton(
+    ventana, text="Línea recta", variable=medio, value="recta"
+).pack()
 tk.Radiobutton(
     ventana, text="Avión", variable=medio, value="avion"
 ).pack()
