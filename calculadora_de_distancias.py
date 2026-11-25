@@ -9,6 +9,8 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 from api import obtener_coordenadas
 RADIO_TIERRA_KM = 6371.0088
+VELOCIDAD_AVION_KMH = 800
+VELOCIDAD_AUTO_KMH = 80
 #Esta función calcula la distancia de gran círculo entre dos pares (latitud, longitud) utilizando la fórmula de Haversine. La distancia se devuelve en kilómetros.
 
 def calcular_distancia(coordenadas_origen, coordenadas_destino):
@@ -27,6 +29,42 @@ def calcular_distancia(coordenadas_origen, coordenadas_destino):
     a = min(1.0, max(0.0, a))
     angulo_central = 2 * atan2(sqrt(a), sqrt(1 - a))
     return RADIO_TIERRA_KM * angulo_central
+
+
+def calcular_tiempo_viaje(distancia_km, velocidad_kmh):
+    """Calcula el tiempo de viaje en horas."""
+    if distancia_km < 0 or velocidad_kmh <= 0:
+        raise ValueError("La distancia y la velocidad deben ser válidas.")
+    return distancia_km / velocidad_kmh
+
+
+def convertir_horas_a_horas_y_minutos(horas):
+    """Convierte horas decimales a texto en horas y minutos."""
+    if horas < 0:
+        raise ValueError("Las horas no pueden ser negativas.")
+
+    horas_enteras = int(horas)
+    minutos = int(round((horas - horas_enteras) * 60))
+    if minutos == 60:
+        horas_enteras += 1
+        minutos = 0
+    return f"{horas_enteras} horas {minutos} minutos"
+
+
+def obtener_distancias_y_tiempos(distancia_km):
+    """Calcula las distancias y los tiempos estimados para avión y automóvil."""
+    tiempo_avion = calcular_tiempo_viaje(distancia_km, VELOCIDAD_AVION_KMH)
+    tiempo_auto = calcular_tiempo_viaje(distancia_km, VELOCIDAD_AUTO_KMH)
+    return {
+        "avion": {
+            "distancia_km": distancia_km,
+            "tiempo_horas": tiempo_avion,
+        },
+        "carro": {
+            "distancia_km": distancia_km,
+            "tiempo_horas": tiempo_auto,
+        },
+    }
 
 
 def pedir_ciudad(mensaje):

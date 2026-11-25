@@ -181,9 +181,6 @@ tk.Radiobutton(
     ventana, text="Ambos", variable=medio, value="ambos"
 ).pack()
 
-boton_calcular = tk.Button(ventana, text="Calcular", command=calcular)
-boton_calcular.pack(pady=10)
-
 lbl_resultado = tk.Label(ventana, text="", font=("Arial", 10, "bold"))
 lbl_resultado.pack()
 
