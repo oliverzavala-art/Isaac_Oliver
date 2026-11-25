@@ -16,7 +16,9 @@ from calculadora_de_distancias import (
 
 RUTA_CACHE = Path(__file__).resolve().parent / "data" / "coordenadas_cache.json"
 
-
+#Este código define funciones para cargar y guardar un caché de coordenadas de ciudades en un archivo JSON, así como para obtener coordenadas con caché y calcular distancias entre ciudades usando una interfaz gráfica de usuario (GUI) con Tkinter.
+#GUI es un entorno visual que permite interactuar con una computadora o dispositivo electrónico mediante elementos gráficos.
+#Tkinter. es una aplicación visual creada en Python usando su biblioteca estándar Tkinter para interactuar mediante ventanas, botones, menús y cuadros de texto en lugar de escribir comandos en una consola
 def cargar_cache():
     if not RUTA_CACHE.exists():
         return {}
