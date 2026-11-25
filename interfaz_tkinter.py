@@ -31,17 +31,20 @@ def cargar_cache():
 
     return cache
 
-
+#Este código define una función para guardar un diccionario de caché en un archivo JSON, creando automáticamente la carpeta necesaria si no existe.
 def guardar_cache(cache):
     RUTA_CACHE.parent.mkdir(parents=True, exist_ok=True)
     with RUTA_CACHE.open("w", encoding="utf-8") as archivo:
         json.dump(cache, archivo, ensure_ascii=False, indent=4)
 
-
+#En esta parte del codigo, se define una función para obtener las coordenadas de una ciudad utilizando un caché local. Si las coordenadas 
+#ya están en el caché, se devuelven directamente; de lo contrario, se consultan a través de la API y se guardan en el caché para futuras consultas.
 def clave_ciudad(ciudad):
     return ciudad.strip().casefold()
 
-
+#En este codigo la funcion es obtener las coordenadas de una ciudad utilizando un caché local. 
+#Si las coordenadas ya están en el caché, se devuelven directamente; de lo contrario, 
+#se consultan a través de la API y se guardan en el caché para futuras consultas.
 def obtener_coordenadas_con_cache(ciudad, cache):
     clave = clave_ciudad(ciudad)
     if clave in cache:
